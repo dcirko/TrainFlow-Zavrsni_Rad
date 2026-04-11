@@ -49,7 +49,7 @@
     </div>
 </section>
   
-  <div class="bmi-section" *ngIf="user?.height && user?.weight; else bmiPrompt">
+  <div class="bmi-section" *ngIf="user.height && user.weight; else bmiPrompt">
     <div class="bmi-header">
       <h2>
         Your BMI (Body Mass Index):
@@ -69,7 +69,7 @@
   
   
 
-  <section class="scroll-section" *ngIf="savedPlans?.length; else noSavedPlans">
+  <section class="scroll-section" *ngIf="savedPlans.length; else noSavedPlans">
   <h2>Saved Training Plans</h2>
   <p>Review training plans you've saved to continue your fitness journey.</p>
 
