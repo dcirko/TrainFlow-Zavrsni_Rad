@@ -35,9 +35,33 @@ public class TrainingServiceImpl implements TrainingService{
         return trainingJpaRepository.findTrainingPlansByUser_Id(user.getId()).stream().map(this::convertToDTO).toList();
     }
 
+
     @Override
+    @Transactional(readOnly = true)
     public List<TrainingPlanDTO> getSuggestedTrainingPlans() {
-        return trainingJpaRepository.findByIsSuggested(true).stream().map(this::convertToDTO).toList();
+        List<TrainingPlan> suggestedTrainingPlans = trainingJpaRepository.findSuggestedPlansWithUser();
+        List<Integer> planIds = suggestedTrainingPlans.stream()
+                .map(TrainingPlan::getId)
+                .distinct()
+                .toList();
+
+        if (!planIds.isEmpty()) {
+            trainingJpaRepository.findAllWithTrainingDaysByIdIn(planIds);
+        }
+
+        List<Integer> dayIds = suggestedTrainingPlans.stream()
+                .flatMap(plan -> plan.getTrainingDays().stream())
+                .map(TrainingDay::getId)
+                .distinct()
+                .toList();
+
+        if (!dayIds.isEmpty()) {
+            trainingDayJpaRepository.findAllWithExercisesByIdIn(dayIds);
+        }
+
+        return suggestedTrainingPlans.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
 
@@ -135,8 +159,11 @@ public class TrainingServiceImpl implements TrainingService{
         List<TrainingPlan> trainingPlans = trainingJpaRepository.findTrainingPlansByIsActiveAndUserEquals(true, user);
 
         if (trainingPlans.isEmpty()) {
-            UserSavedPlans savedPlan = userSavedPlansJpaRepository.findByUserAndIsActive(user, true).orElseThrow(() -> new IllegalStateException("There is no active training plan"));
-            Optional<TrainingPlan> trainingPlan = trainingJpaRepository.findById(savedPlan.getPlan().getId());
+            Optional<UserSavedPlans> savedPlan = userSavedPlansJpaRepository.findByUserAndIsActive(user, true);
+            if (savedPlan.isEmpty()) {
+                return Optional.empty();
+            }
+            Optional<TrainingPlan> trainingPlan = trainingJpaRepository.findById(savedPlan.get().getPlan().getId());
             List<TrainingDay> days = trainingDayJpaRepository.findByPlan_Id(trainingPlan.get().getId());
             return getFullTrainingPlanDTOMethod(trainingPlan.get(), days);
         }else {

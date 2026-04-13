@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/login", "/api/auth/refreshToken", "/api/auth/logout", "/api/auth/register", "/api/training/getSuggestedPlans", "/api/training/getFullTrainingPlan/{id}").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/refreshToken", "/api/auth/logout", "/api/auth/register", "/api/training/getSuggestedPlans", "/api/training/getFullTrainingPlan/*").permitAll()
                         .requestMatchers("/api/user/getUserByEmail", "/api/user/updateProfile", "/api/training/savePlanForUser"
                                 , "/api/training/checkIfAlreadySavedPlan/{planId}", "/api/training/getSavedPlansForUser"
                                 , "/api/training/deleteSavedPlan/{PlanId}", "/api/training/addNewTrainingPlan", "/api/training/getUserTrainingPlans",

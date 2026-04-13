@@ -10,11 +10,13 @@ import hr.zavrsni.trainflowspringbackend.trainingDomain.TrainingPlanDTO;
 import hr.zavrsni.trainflowspringbackend.services.TrainingService;
 import hr.zavrsni.trainflowspringbackend.trainingDomain.WorkoutLogDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/training")
@@ -101,8 +103,14 @@ public class TrainingController {
     }
 
     @GetMapping("/getActivePlan")
-    public FullTrainingPlanDTO getActivePlan(){
-        return trainingService.getActivePlan().orElseThrow(() -> new RuntimeException("No active plan found"));
+    public ResponseEntity<?> getActivePlan() {
+        Optional<FullTrainingPlanDTO> optionalFullTrainingPlanDTO = trainingService.getActivePlan();
+
+        if (optionalFullTrainingPlanDTO.isPresent()) {
+            return ResponseEntity.ok(optionalFullTrainingPlanDTO.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No active plan found");
+        }
     }
 
     @PostMapping("/saveWorkoutLogs")

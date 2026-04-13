@@ -1,4 +1,3 @@
-/* === HERO SECTION === */
 .hero-workout {
   position: relative;
   background: url('/images/photo-1599058918144-1ffabb6ab9a0\ \(1\).avif') no-repeat center center/cover;
@@ -49,7 +48,6 @@
 }
 
 
-/* === WORKOUT INFO (clean look, no box) === */
 .workout-info {
   max-width: 1000px;
   margin: 140px auto 50px;
@@ -124,7 +122,7 @@
 
 
 
-/* === WORKOUT DAY === */
+
 .workout-day {
   max-width: 900px;
   margin: 0 auto;
@@ -138,7 +136,7 @@
 }
 
 
-/* === EXERCISE CARDS === */
+
 .exercise-card {
   background: #fff;
   border-radius: 12px;
@@ -177,7 +175,7 @@
 }
 
 
-/* === INPUTS === */
+
 .inputs {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -210,7 +208,7 @@
 }
 
 
-/* === REST DAY === */
+
 .rest-day {
   text-align: center;
   padding: 40px;
@@ -222,7 +220,7 @@
 }
 
 
-/* === BUTTONS === */
+
 .btn {
   display: inline-block;
   padding: 12px 28px;
@@ -246,7 +244,7 @@
 }
 
 
-/* === PREVIOUS LOGS === */
+
 .previous-logs {
   max-width: 900px;
   margin: 150px auto;
@@ -322,7 +320,6 @@
 
 
 
-/* === QUOTE SECTION === */
 .quote-section {
   margin-top: 80px;
   padding: 40px 20px;

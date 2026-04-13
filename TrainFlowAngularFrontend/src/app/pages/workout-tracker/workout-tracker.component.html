@@ -27,7 +27,7 @@
   <h2>{{ today.day }} – {{ today.name }}</h2>
 
   <form [formGroup]="workoutForm" (ngSubmit)="saveWorkout()">
-    <div formArrayName="logs" *ngIf="today.exercises?.length; else restDay">
+    <div formArrayName="logs" *ngIf="today.exercises.length; else restDay">
       <div class="exercise-card" *ngFor="let log of logs.controls; let i = index" [formGroupName]="i">
         <div class="exercise-header">
           <h3>{{ today.exercises[i].exerciseName }}</h3>
@@ -81,7 +81,7 @@
 </section>
 
 
-<section class="previous-logs" *ngIf="previousLogs?.length; else noLogs">
+<section class="previous-logs" *ngIf="previousLogs.length; else noLogs">
   <h2>📜 Your Previous Logs For This Training Plan</h2>
   <div class="log-list">
     <div class="log-card" *ngFor="let log of previousLogs">

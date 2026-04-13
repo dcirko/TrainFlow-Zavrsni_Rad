@@ -22,7 +22,7 @@ import { RefreshService } from '../../services/refresh.service';
 export class ProfileComponent implements OnInit{
   token !: string | null;
   userId!:number;
-  user !: User;
+  user!: User;
   newAge!:number;
   newHeight!: number;
   newWeight!: number;
@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit{
   getSavedPlans(){
    this.app.getSavedPlansForUser().subscribe({
       next: (data) => {
-        this.savedPlans = data
+        this.savedPlans = data;
         this.savedPlans?.forEach(plan => {
           this.app.checkIfSavedPlanIsActive(plan.id).subscribe({
             next: (isActive) => {

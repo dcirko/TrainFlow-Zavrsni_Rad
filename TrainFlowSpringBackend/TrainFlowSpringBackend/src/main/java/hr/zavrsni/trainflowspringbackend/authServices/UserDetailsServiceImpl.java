@@ -5,10 +5,11 @@ import hr.zavrsni.trainflowspringbackend.authDomain.RolesUser;
 import hr.zavrsni.trainflowspringbackend.authDomain.UserInfo;
 import hr.zavrsni.trainflowspringbackend.authDomain.UserInfoDTO;
 import hr.zavrsni.trainflowspringbackend.authRepositories.UserRepository;
+import hr.zavrsni.trainflowspringbackend.repositories.TrainingDayJpaRepository;
 import hr.zavrsni.trainflowspringbackend.repositories.TrainingJpaRepository;
 import hr.zavrsni.trainflowspringbackend.repositories.UserSavedPlansJpaRepository;
 import hr.zavrsni.trainflowspringbackend.trainingDomain.*;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private TrainingJpaRepository trainingJpaRepository;
     @Autowired
     private UserSavedPlansJpaRepository userSavedPlansJpaRepository;
+    @Autowired
+    private TrainingDayJpaRepository trainingDayJpaRepository;
 
 
     @Override
@@ -76,8 +79,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public UserInfo getUserInfo(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserInfo user = repository.findByEmail(userDetails.getUsername());
-        return user;
+        return repository.findByEmail(userDetails.getUsername());
     }
 
     @Transactional
@@ -116,12 +118,40 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userSavedPlansJpaRepository.deleteByPlanIdAndUserId(trainingPlan.getId(), user.getId());
     }
 
+    @Transactional(readOnly = true)
+    public List<TrainingPlanDTO> getSavedPlans() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
 
-    public List<TrainingPlanDTO> getSavedPlans(){
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserInfo user = repository.findByEmail(userDetails.getUsername());
-        return user.getSavedPlans().stream().map(this::convertToDTO).collect(Collectors.toList());
+        UserInfo user = repository.findByEmailWithSavedPlans(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Integer> planIds = user.getSavedPlans().stream()
+                .map(TrainingPlan::getId)
+                .distinct()
+                .toList();
+
+        if (!planIds.isEmpty()) {
+            trainingJpaRepository.findAllWithTrainingDaysByIdIn(planIds);
+        }
+
+        List<Integer> dayIds = user.getSavedPlans().stream()
+                .flatMap(plan -> plan.getTrainingDays().stream())
+                .map(TrainingDay::getId)
+                .distinct()
+                .toList();
+
+        if (!dayIds.isEmpty()) {
+            trainingDayJpaRepository.findAllWithExercisesByIdIn(dayIds);
+        }
+
+        return user.getSavedPlans().stream()
+                .map(this::convertToDTO)
+                .toList();
     }
+
 
 
     @Transactional
@@ -192,3 +222,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
     }
 }
+

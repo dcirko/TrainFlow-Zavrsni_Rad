@@ -57,7 +57,7 @@
   <div class="scroll-container-wrapper">
     <button class="scroll-btn left" (click)="scrollLeft()">‹</button>
 
-    <div class="scroll-container" #scrollBox *ngIf="suggestedPlans?.length">
+    <div class="scroll-container" #scrollBox *ngIf="suggestedPlans.length > 0; else noPlans">
       <a
         class="plan-card"
         *ngFor="let plan of suggestedPlans"
@@ -74,6 +74,10 @@
         </div>
       </a>
     </div>
+
+    <ng-template #noPlans>
+      <p>No suggested plans available.</p>
+    </ng-template>
 
     <button class="scroll-btn right" (click)="scrollRight()">›</button>
   </div>
@@ -94,7 +98,7 @@
       <div *ngFor="let day of fullTrainingPlan.days" class="training-day">
         <h3>{{ day.day }} – {{ day.name }}</h3>
 
-        <div class="table-wrapper" *ngIf="!day.name.match('Rest Day')">
+        <div class="table-wrapper" *ngIf="!day.name.includes('Rest Day')">
           <table class="exercise-table">
             <thead>
               <tr>

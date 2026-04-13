@@ -19,20 +19,29 @@ import { ModalService } from '../../../services/modal.service';
 })
 export class TrainingHomepageComponent implements OnInit{
   @ViewChild('scrollBox', { static: false }) scrollBox!: ElementRef;
-  suggestedPlans!: SuggestedPlans[];
-  fullTrainingPlan!: FullTrainingPlan | null;
-  checkIfAdmin!: boolean;
+  suggestedPlans: SuggestedPlans[] = [];
+  fullTrainingPlan: FullTrainingPlan | null = null;
+  checkIfAdmin = false;
 
   constructor(private appService: AppService, private router: Router, private auth: AuthService, private userApi: UserService, private modal: ModalService) {}
 
   ngOnInit(): void {
     this.getSuggestedPlans();
+    console.log(this.suggestedPlans);
     this.isAdmin();
   }
 
   getSuggestedPlans(){
-    this.appService.getSuggestedPlans().subscribe(data => {
-      this.suggestedPlans = data;});
+    this.appService.getSuggestedPlans().subscribe({
+      next: (data) => {
+        this.suggestedPlans = data;
+      },
+      error: (err) => {
+        console.error('Failed to load suggested plans', err);
+        this.suggestedPlans = [];
+      }
+    });
+
   }
 
   getFullTrainingPlan(planId: number){
@@ -42,9 +51,15 @@ export class TrainingHomepageComponent implements OnInit{
   selectedPlan: any = null;
 
   openPlanModal(planId: number) {
-    this.getFullTrainingPlan(planId);
-    console.log('Selected plan: ', this.fullTrainingPlan);
-    this.modal.setOpen(true);
+    this.appService.getFullTrainingPlan(planId).subscribe({
+      next: (data) => {
+        this.fullTrainingPlan = data;
+        this.modal.setOpen(true);
+      },
+      error: (err) => {
+        console.error('Failed to load full training plan', err);
+      }
+    });
   }
 
   closeModal() {
@@ -103,12 +118,13 @@ export class TrainingHomepageComponent implements OnInit{
 
 
   scrollLeft() {
-    this.scrollBox.nativeElement.scrollBy({ left: -300, behavior: 'smooth' });
+    this.scrollBox?.nativeElement?.scrollBy({ left: -300, behavior: 'smooth' });
   }
 
   scrollRight() {
-    this.scrollBox.nativeElement.scrollBy({ left: 300, behavior: 'smooth' });
+    this.scrollBox?.nativeElement?.scrollBy({ left: 300, behavior: 'smooth' });
   }
+
 
 
   /*ADMIN*/
