@@ -1,0 +1,15 @@
+# Node / Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# Java / Spring
+target/
+
+# General
+*.log
+.env
+.vscode/
+.idea/
+.DS_Store
