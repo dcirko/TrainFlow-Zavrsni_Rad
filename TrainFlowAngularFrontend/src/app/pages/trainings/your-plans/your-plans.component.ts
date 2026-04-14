@@ -20,8 +20,8 @@ import { ModalService } from '../../../services/modal.service';
   styleUrl: './your-plans.component.css'
 })
 export class YourPlansComponent implements OnInit {
-  userPlans!: FullTrainingPlan[];
-  savedPlans!: FullTrainingPlan[];
+  userPlans: FullTrainingPlan[] = [];
+  savedPlans: FullTrainingPlan[] = [];
   selectedPlan!: FullTrainingPlan | null;
   activePlans: { [planId: number]: boolean } = {};
   modalSource: 'user' | 'saved' | null = null;

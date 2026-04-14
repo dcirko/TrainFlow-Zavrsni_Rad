@@ -29,11 +29,26 @@ public class TrainingServiceImpl implements TrainingService{
     private UserSavedPlansJpaRepository userSavedPlansJpaRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<TrainingPlanDTO> getUserTrainingPlans() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfo user = repository.findByEmail(userDetails.getUsername());
-        return trainingJpaRepository.findTrainingPlansByUser_Id(user.getId()).stream().map(this::convertToDTO).toList();
+
+        List<TrainingPlan> plans = trainingJpaRepository.findTrainingPlansByUser_Id(user.getId());
+
+        List<Integer> planIds = plans.stream()
+                .map(TrainingPlan::getId)
+                .distinct()
+                .toList();
+
+        List<TrainingPlan> plansWithDays = planIds.isEmpty()
+                ? List.of()
+                : trainingJpaRepository.findAllWithTrainingDaysByIdIn(planIds);
+
+        return getTrainingPlanEager(plansWithDays);
     }
+
+
 
 
     @Override
@@ -49,19 +64,7 @@ public class TrainingServiceImpl implements TrainingService{
             trainingJpaRepository.findAllWithTrainingDaysByIdIn(planIds);
         }
 
-        List<Integer> dayIds = suggestedTrainingPlans.stream()
-                .flatMap(plan -> plan.getTrainingDays().stream())
-                .map(TrainingDay::getId)
-                .distinct()
-                .toList();
-
-        if (!dayIds.isEmpty()) {
-            trainingDayJpaRepository.findAllWithExercisesByIdIn(dayIds);
-        }
-
-        return suggestedTrainingPlans.stream()
-                .map(this::convertToDTO)
-                .toList();
+        return getTrainingPlanEager(suggestedTrainingPlans);
     }
 
 
@@ -125,6 +128,7 @@ public class TrainingServiceImpl implements TrainingService{
 
         if(trainingPlan.getIsSuggested().equals(true)){
             UserSavedPlans userSavedPlan = userSavedPlansJpaRepository.findByUserAndPlan_Id(user, trainingPlan.getId());
+
             userSavedPlan.setIsActive(true);
             userSavedPlansJpaRepository.save(userSavedPlan);
         }else{
@@ -237,6 +241,22 @@ public class TrainingServiceImpl implements TrainingService{
             trainingDay.setExercises(exercises);
             return trainingDay;
         }).toList();
+    }
+
+    private List<TrainingPlanDTO> getTrainingPlanEager(List<TrainingPlan> plansWithDays) {
+        List<Integer> dayIds = plansWithDays.stream()
+                .flatMap(plan -> plan.getTrainingDays().stream())
+                .map(TrainingDay::getId)
+                .distinct()
+                .toList();
+
+        if (!dayIds.isEmpty()) {
+            trainingDayJpaRepository.findAllWithExercisesByIdIn(dayIds);
+        }
+
+        return plansWithDays.stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 
 

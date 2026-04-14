@@ -90,11 +90,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserInfo user = repository.findByEmail(userDetails.getUsername());
 
-        /*List<TrainingPlan> copy = new ArrayList<>(user.getSavedPlans());
-        copy.add(trainingPlan);
-        user.setSavedPlans(copy);
-        repository.save(user);*/
-
         UserSavedPlans userSavedPlans = new UserSavedPlans();
         userSavedPlans.setUser(user);
         userSavedPlans.setPlan(trainingPlan);
