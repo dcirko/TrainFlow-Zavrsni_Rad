@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, it, expect, beforeEach } from '@jest/globals';
 
 import { TrainingPageComponent } from './training-page.component';
 

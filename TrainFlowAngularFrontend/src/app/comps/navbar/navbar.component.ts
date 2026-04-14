@@ -103,7 +103,7 @@ export class NavbarComponent implements OnInit{
       if (!target.closest('.dropdown')) {
         this.isDropdownOpen = false;
       }
-    }
+  }
 
 
 

@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedIn.asObservable();
-  usersUrl = 'http://localhost:8080/api/auth';
+  private readonly usersUrl = 'http://localhost:8080/api/auth';
 
   httpOptions={
     headers: new HttpHeaders({'Content-Type':'application/json'}),
@@ -20,7 +20,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   register(userData: any): Observable<any>{
-    console.log("Register info sent to backend", userData);
+    //console.log("Register info sent to backend", userData);
     return this.http.post(`${this.usersUrl}/register` , userData, this.httpOptions).pipe(
       tap(response => {
         console.log('User registered successfully');
@@ -29,12 +29,12 @@ export class AuthService {
   }
 
   login(userData: any): Observable<JwtResponse>{
-    console.log("Login info sent to backend", userData);
+    //console.log("Login info sent to backend", userData);
     return this.http.post<JwtResponse>(`${this.usersUrl}/login`, userData, this.httpOptions).pipe(
       tap(response => {
         console.log('User logged in successfully');
         localStorage.setItem('accessToken', response.accessToken);
-        console.log("Access token", response.accessToken);
+        //console.log("Access token", response.accessToken);
         this.loggedIn.next(true);
       }
     ));

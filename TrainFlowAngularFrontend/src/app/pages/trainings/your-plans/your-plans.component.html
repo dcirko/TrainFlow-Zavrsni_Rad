@@ -4,7 +4,7 @@
 </div>
 <section class="your-trainings">
   <h2>Training Plans Created By You</h2>
-  <div class="training-cards" *ngIf="userPlans?.length; else noPlans">
+  <div class="training-cards" *ngIf="userPlans.length; else noPlans">
     <div class="training-card" *ngFor="let plan of userPlans" (click)="openSavedModal(plan, 'user')">
       <h3>{{ plan.name }}</h3>
       <p>{{ plan.description }}</p>
@@ -31,7 +31,7 @@
 </section>
 
 
-<section class="scroll-section" *ngIf="savedPlans?.length; else noSavedPlans">
+<section class="scroll-section" *ngIf="savedPlans.length; else noSavedPlans">
   <h2>Saved Training Plans</h2>
   <p>Review training plans you've saved to continue your fitness journey.</p>
 
@@ -113,7 +113,7 @@
 
     <!-- === USER CREATED PLANS === -->
     <div *ngIf="modalSource === 'user'" class="plan-action">
-      <ng-container *ngIf="!selectedPlan?.isActive; else alreadyActiveUser">
+      <ng-container *ngIf="!selectedPlan.isActive; else alreadyActiveUser">
         <button class="btn primary" (click)="makeActivePlan(selectedPlan.id)">
           ✅ Make Active
         </button>

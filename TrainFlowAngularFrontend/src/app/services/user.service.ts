@@ -12,14 +12,14 @@ export class UserService {
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   getUser(){
-    const token = this.auth.getToken();
-    console.log("Token je:", token);
+    /*const token = this.auth.getToken();
+    console.log("Token je:", token);*/
     return this.http.get<any>(`${this.userUrl}/getUserByEmail`);
   }
 
   updateProfile(user : User){
-    const token = this.auth.getToken();
-    console.log("Token je:", token);
+    /*const token = this.auth.getToken();
+    console.log("Token je:", token);*/
     return this.http.put<any>(`${this.userUrl}/updateProfile`, user);
   }
 

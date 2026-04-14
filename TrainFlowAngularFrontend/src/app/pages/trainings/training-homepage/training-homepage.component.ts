@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SuggestedPlans } from '../../../domain/suggestedPlansMocked';
+import { SuggestedPlans } from '../../../domain/suggestedPlans';
 import { AppService } from '../../../services/app.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';

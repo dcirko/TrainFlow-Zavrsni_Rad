@@ -163,7 +163,6 @@
     transition: 0.3s;
   }
 
-  /* Animacija kad je otvoren */
   .hamburger.open span:nth-child(1) {
     transform: rotate(45deg) translateY(8px);
   }

@@ -115,7 +115,7 @@ button:hover {
   color: white;
 }
 
-/* GRID layout for sets, reps, restTime */
+
 .exercise-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FullTrainingPlan } from '../../../domain/fullTrainingPlan';
 import Swal from 'sweetalert2';
 import { AppService } from '../../../services/app.service';
-import { SuggestedPlans } from '../../../domain/suggestedPlansMocked';
+import { SuggestedPlans } from '../../../domain/suggestedPlans';
 import { Router, RouterLink } from '@angular/router';
 import { identity } from 'rxjs';
 import { UserService } from '../../../services/user.service';

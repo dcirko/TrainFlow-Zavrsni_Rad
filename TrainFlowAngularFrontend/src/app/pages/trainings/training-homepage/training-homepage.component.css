@@ -59,7 +59,6 @@
   }
 }
 
-/* Buttons */
 .btn {
   background-color: #ffffff;
   color: #36ad79;
@@ -99,7 +98,7 @@
   transform: scale(1.05);
 }
 
-/* Info Section */
+
 .training-info {
   display: flex;
   justify-content: space-around;
@@ -148,7 +147,7 @@
   color: #333;
   font-style: italic;
 }
-/* Plan Actions */
+
 .plan-actions-with-image {
   margin-top: 120px;
   display: flex;
@@ -195,7 +194,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Your Plans */
+
 .your-plans {
   background-color: #f7f9fa;
   padding: 120px 20px;
@@ -237,7 +236,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* === SUGGESTED PLANS / SCROLL SECTION === */
+
 .scroll-section {
   padding: 60px 20px;
   margin: 0 auto;
@@ -416,8 +415,6 @@
 .scroll-btn:hover {
   background-color: #eee;
 }
-
-/* === RESPONSIVE === */
 @media (max-width: 768px) {
   .hero-training h1 {
     font-size: 2.2rem;

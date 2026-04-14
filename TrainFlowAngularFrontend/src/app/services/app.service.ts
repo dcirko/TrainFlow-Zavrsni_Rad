@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { User } from '../domain/user';
 import { Observable, tap } from 'rxjs';
-import { SuggestedPlans } from '../domain/suggestedPlansMocked';
+import { SuggestedPlans } from '../domain/suggestedPlans';
 import { FullTrainingPlan } from '../domain/fullTrainingPlan';
 import { WorkoutLog } from '../domain/workoutLog';
 import { Exercise } from '../domain/exercise';
@@ -12,11 +12,11 @@ import { Exercise } from '../domain/exercise';
   providedIn: 'root'
 })
 export class AppService {
-  private trainingUrl = 'http://localhost:8080/api/training';
+  private readonly trainingUrl = 'http://localhost:8080/api/training';
 
   suggestedPlans!: SuggestedPlans[];
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private http: HttpClient) { }
 
 
   getSuggestedPlans(): Observable<SuggestedPlans[]>{
