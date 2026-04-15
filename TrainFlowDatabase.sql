@@ -68,12 +68,13 @@ CREATE TABLE `refresh_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `UKf95ixxe7pa48ryn1awmh2evt7` (`user_id`),
   CONSTRAINT `FKjtx87i0jvq2svedphegvdwcuy` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `refresh_token` */
 
 insert  into `refresh_token`(`id`,`expiry_date`,`token`,`user_id`) values 
-(9,'2026-04-13 21:23:53.244397','b62138f5-c570-49f7-ba8e-3e2fba367fe8',1);
+(11,'2026-04-14 20:50:33.424396','aa387b43-b85d-47f5-b306-b3e00ab53cf2',1),
+(12,'2026-04-14 21:19:31.242844','2ca4355d-eb6a-454d-a7c4-20a83d402635',2);
 
 /*Table structure for table `roles` */
 
@@ -107,7 +108,7 @@ CREATE TABLE `training_day_exercises` (
   KEY `FKavr6fmmee9yq46seei6yrgiei` (`training_day_id`),
   CONSTRAINT `FK85q8ocin0e8hki9g14sx2lfif` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`),
   CONSTRAINT `FKavr6fmmee9yq46seei6yrgiei` FOREIGN KEY (`training_day_id`) REFERENCES `training_days` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `training_day_exercises` */
 
@@ -159,21 +160,21 @@ insert  into `training_day_exercises`(`id`,`reps`,`rest_time`,`sets`,`exercise_i
 (54,30,30,4,21,8),
 (55,60,30,4,22,8),
 (56,30,30,3,9,8),
-(57,20,0,1,8,9),
-(58,45,30,3,9,9),
-(59,20,30,3,21,9),
-(60,8,60,2,24,9),
-(61,10,60,2,23,9),
-(62,12,45,4,1,10),
-(63,15,45,4,12,10),
-(64,12,45,4,14,10),
-(65,15,30,4,10,10),
-(66,30,30,3,9,10),
-(67,25,0,1,8,11),
-(68,90,30,4,22,11),
-(69,20,30,4,20,11),
-(70,30,30,4,21,11),
-(71,8,60,2,24,11);
+(72,20,0,1,8,13),
+(73,45,30,3,9,13),
+(74,20,30,3,21,13),
+(75,8,60,2,24,13),
+(76,10,60,2,23,13),
+(77,12,45,4,1,14),
+(78,15,45,4,12,14),
+(79,12,45,4,14,14),
+(80,15,30,4,10,14),
+(81,30,30,3,9,14),
+(82,25,0,1,8,15),
+(83,90,30,4,22,15),
+(84,20,30,4,20,15),
+(85,20,30,4,21,15),
+(86,8,60,2,24,15);
 
 /*Table structure for table `training_days` */
 
@@ -187,7 +188,7 @@ CREATE TABLE `training_days` (
   PRIMARY KEY (`id`),
   KEY `FKvh2xgcusjvc4ax2j998jwikt` (`plan_id`),
   CONSTRAINT `FKvh2xgcusjvc4ax2j998jwikt` FOREIGN KEY (`plan_id`) REFERENCES `training_plans` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `training_days` */
 
@@ -200,10 +201,10 @@ insert  into `training_days`(`id`,`day`,`name`,`plan_id`) values
 (6,'Wednesday','Legs',2),
 (7,'Thursday','Shoulders',2),
 (8,'Friday','Arms',2),
-(9,'Monday','HIIT 1',3),
-(10,'Wednesday','Cardio + Core',3),
-(11,'Friday','HIIT 2',3),
-(12,'Saturday','Fat Burn',3);
+(13,'Monday','HIIT 1',3),
+(14,'Wednesday','Cardio + Core',3),
+(15,'Friday','HIIT 2',3),
+(16,'Saturday','Fat Burn',3);
 
 /*Table structure for table `training_plans` */
 
@@ -228,7 +229,7 @@ CREATE TABLE `training_plans` (
 insert  into `training_plans`(`id`,`description`,`difficulty`,`goal`,`is_active`,`is_suggested`,`name`,`user_id`) values 
 (1,'Full body plan for beginners, 3x per week','Beginner','Strength','\0','','Beginner Full Body',1),
 (2,'Advanced muscle building split','Advanced','Muscle Gain','\0','','Muscle Gain Split',1),
-(3,'Fat loss plan with HIIT and cardio','Intermediate','Fat Loss','\0','','Fat Loss HIIT',1);
+(3,'Fat loss plan with HIIT and cardio','Advanced','Fat Loss','\0','\0','Fat Loss HIIT',1);
 
 /*Table structure for table `user_role` */
 
@@ -246,7 +247,8 @@ CREATE TABLE `user_role` (
 /*Data for the table `user_role` */
 
 insert  into `user_role`(`user_id`,`role_id`) values 
-(1,3);
+(1,3),
+(2,3);
 
 /*Table structure for table `user_saved_plans` */
 
@@ -263,9 +265,14 @@ CREATE TABLE `user_saved_plans` (
   KEY `FKh2simt7xf8o34x6bc6q4eyhsw` (`user_id`),
   CONSTRAINT `FK3h9trhngo1i90hgeg3aojf79b` FOREIGN KEY (`plan_id`) REFERENCES `training_plans` (`id`),
   CONSTRAINT `FKh2simt7xf8o34x6bc6q4eyhsw` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `user_saved_plans` */
+
+insert  into `user_saved_plans`(`id`,`is_active`,`saved_at`,`plan_id`,`user_id`) values 
+(2,'\0','2026-04-14 21:07:29.781751',1,1),
+(3,'\0','2026-04-14 21:07:53.975818',2,1),
+(4,'\0','2026-04-14 21:10:02.634550',1,2);
 
 /*Table structure for table `users` */
 
@@ -282,12 +289,13 @@ CREATE TABLE `users` (
   `surname` varchar(255) DEFAULT NULL,
   `weight` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`age`,`email`,`gender`,`height`,`name`,`password`,`surname`,`weight`) values 
-(1,25,'domagoj@test.com','MALE',180,'Domagoj','$2a$10$FitSFgXP68OD5YGFX28PxuosxHTRFIAiLAhoT7kst5qiQPVEqIEt.','Cirko',80);
+(1,25,'domagoj@test.com','MALE',180,'Domagoj','$2a$10$FitSFgXP68OD5YGFX28PxuosxHTRFIAiLAhoT7kst5qiQPVEqIEt.','Cirko',90),
+(2,22,'domagoj.cirko@gmail.com','male',186,'Domagoj','$2a$10$oQD7vBFs4ZcOVE3mDXxU4O.qaK4.GHLLjL3Rz6HyrmWBgxbVrv/8C','Čirko',90);
 
 /*Table structure for table `workout_logs` */
 
@@ -319,9 +327,16 @@ CREATE TABLE `workout_logs` (
   CONSTRAINT `FKdm3r35e6h7v6pgvnou9m66e9o` FOREIGN KEY (`training_day_id`) REFERENCES `training_days` (`id`),
   CONSTRAINT `FKeyc406n88v34fbl3j2mgf86eq` FOREIGN KEY (`training_day_exercise_id`) REFERENCES `training_day_exercises` (`id`),
   CONSTRAINT `FKq91yj006d78mkwanc7h1731i6` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `workout_logs` */
+
+insert  into `workout_logs`(`id`,`actual_reps`,`actual_sets`,`actual_weight`,`log_date`,`notes`,`planned_reps`,`planned_sets`,`planned_weight`,`exercise_id`,`training_day_id`,`training_day_exercise_id`,`training_plan_id`,`user_id`) values 
+(1,6,4,100,'2026-04-14','Good',8,4,100,2,5,34,2,1),
+(2,NULL,NULL,NULL,'2026-04-14','',8,4,0,3,5,35,2,1),
+(3,NULL,NULL,NULL,'2026-04-14','',12,3,0,15,5,36,2,1),
+(4,NULL,NULL,NULL,'2026-04-14','',12,3,0,16,5,37,2,1),
+(5,NULL,NULL,NULL,'2026-04-14','',12,3,0,12,5,38,2,1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
