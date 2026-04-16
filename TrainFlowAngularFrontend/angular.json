@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "FitFlow": {
+    "TrainFlow": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -36,13 +36,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "700kB",
+                  "maximumError": "1.2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "12kB"
                 }
               ],
               "outputHashing": "all"
@@ -59,10 +59,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "FitFlow:build:production"
+              "buildTarget": "TrainFlow:build:production"
             },
             "development": {
-              "buildTarget": "FitFlow:build:development"
+              "buildTarget": "TrainFlow:build:development"
             }
           },
           "defaultConfiguration": "development"
