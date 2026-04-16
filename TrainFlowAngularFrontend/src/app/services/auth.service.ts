@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtResponse } from '../domain/jwtResponse';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../environment.prod';
 
 
 @Injectable({
@@ -10,7 +11,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedIn.asObservable();
-  private readonly usersUrl = 'http://localhost:8080/api/auth';
+  //private readonly authUrl = 'http://46.225.77.181:8080/api/auth';
+  private readonly authUrl = `${environment.apiUrl}/auth`;
 
   httpOptions={
     headers: new HttpHeaders({'Content-Type':'application/json'}),
@@ -21,7 +23,7 @@ export class AuthService {
 
   register(userData: any): Observable<any>{
     //console.log("Register info sent to backend", userData);
-    return this.http.post(`${this.usersUrl}/register` , userData, this.httpOptions).pipe(
+    return this.http.post(`${this.authUrl}/register` , userData, this.httpOptions).pipe(
       tap(response => {
         console.log('User registered successfully');
       })
@@ -30,7 +32,7 @@ export class AuthService {
 
   login(userData: any): Observable<JwtResponse>{
     //console.log("Login info sent to backend", userData);
-    return this.http.post<JwtResponse>(`${this.usersUrl}/login`, userData, this.httpOptions).pipe(
+    return this.http.post<JwtResponse>(`${this.authUrl}/login`, userData, this.httpOptions).pipe(
       tap(response => {
         console.log('User logged in successfully');
         localStorage.setItem('accessToken', response.accessToken);
@@ -42,7 +44,7 @@ export class AuthService {
 
   refreshToken(): Observable<JwtResponse>{
     console.log("Refresh token called");
-    return this.http.post<JwtResponse>(`${this.usersUrl}/refreshToken`, this.httpOptions)
+    return this.http.post<JwtResponse>(`${this.authUrl}/refreshToken`, this.httpOptions)
   }
 
   logout(): Observable<any>{
@@ -50,7 +52,7 @@ export class AuthService {
     localStorage.removeItem("accessToken");
     this.loggedIn.next(false);
 
-    return this.http.post(`${this.usersUrl}/logout`, this.httpOptions);
+    return this.http.post(`${this.authUrl}/logout`, this.httpOptions);
   }
 
   getToken(): string{

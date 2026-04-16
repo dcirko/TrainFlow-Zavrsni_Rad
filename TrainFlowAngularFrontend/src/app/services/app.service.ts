@@ -7,12 +7,15 @@ import { SuggestedPlans } from '../domain/suggestedPlans';
 import { FullTrainingPlan } from '../domain/fullTrainingPlan';
 import { WorkoutLog } from '../domain/workoutLog';
 import { Exercise } from '../domain/exercise';
+import { environment } from '../environment.prod';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
-  private readonly trainingUrl = 'http://localhost:8080/api/training';
+  //private readonly trainingUrl = 'http://46.225.77.181:8080/api/training';
+  private readonly trainingUrl = `${environment.apiUrl}/training`;
 
   suggestedPlans!: SuggestedPlans[];
 

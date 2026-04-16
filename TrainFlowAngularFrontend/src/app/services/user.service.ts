@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { User } from '../domain/user';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
+import { environment } from '../environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private userUrl = 'http://localhost:8080/api/user';
+  //private userUrl = 'http://46.225.77.181:8080/api/user';
+  private readonly userUrl = `${environment.apiUrl}/user`;
+
   constructor(private http: HttpClient, private auth: AuthService) { }
 
   getUser(){
