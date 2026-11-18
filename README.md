@@ -1,145 +1,72 @@
 # TrainFlow
 
-TrainFlow je full-stack web aplikacija za upravljanje trening planovima i praćenje napretka korisnika. Sustav omogućuje autentifikaciju korisnika, kreiranje i upravljanje trening planovima te bilježenje izvedenih treninga kroz modularnu arhitekturu.
+TrainFlow is a full-stack web application for building workout plans, logging completed workouts, and tracking progress. It was developed as the undergraduate thesis for a Computer Science degree.
 
----
+## Features
 
-## Overview
-
-Aplikacija je dizajnirana kao odvojeni frontend i backend sustav:
-
-* Backend: REST API baziran na Spring Bootu
-* Frontend: SPA aplikacija razvijena u Angularu
-* Baza: relacijska baza podataka (MySQL)
-* Deployment: Docker (containerized environment)
-
----
+- Register, sign in, and manage your profile.
+- Create and edit training plans with training days and exercises.
+- Save training plans and log completed workouts.
+- Use role-based access for users and administrators.
 
 ## Architecture
 
-* Stateless backend (JWT autentifikacija)
-* RESTful API dizajn
-* Layered arhitektura:
+The Angular and TypeScript single-page application talks to a Java 21 Spring Boot REST API. The backend separates controllers, services, and repositories. It uses Spring Data JPA and Hibernate with MySQL, Spring Security with JWT access tokens, and BCrypt for password hashing.
 
-  * Controller layer
-  * Service layer
-  * Repository layer
-* Relacijski model baze s JPA/Hibernate ORM-om
+## Getting started
 
----
+Install Docker with Docker Compose and Node.js with npm. Compose starts the backend and MySQL. Run the Angular frontend separately.
 
-## Technology Stack
+1. Change to the backend directory.
 
-### Backend
+   ```bash
+   cd TrainFlowSpringBackend/TrainFlowSpringBackend
+   ```
 
-* Java 21
-* Spring Boot
-* Spring Security (JWT)
-* Spring Data JPA (Hibernate)
-* MySQL
-* Maven
+2. Create a local `.env` alongside `docker-compose.yml`. Use the local MySQL password configured in Compose and a generated Base64 JWT signing secret. Keep the file out of Git.
 
-### Frontend
+   ```dotenv
+   SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/trainflow
+   SPRING_DATASOURCE_USERNAME=root
+   SPRING_DATASOURCE_PASSWORD=YOUR_LOCAL_MYSQL_PASSWORD
+   JWT_BASE64_SECRET=YOUR_BASE64_SIGNING_SECRET
+   ```
 
-* Angular
-* TypeScript
+3. Start the backend and database.
 
-### Infrastructure
+   ```bash
+   docker compose up --build
+   ```
 
-* Docker
-* Docker Compose
+4. In a second terminal, start Angular from the repository root.
 
----
+   ```bash
+   cd TrainFlowAngularFrontend
+   npm ci
+   npm start
+   ```
 
-## Core Features
+The frontend runs at http://localhost:4200 and the backend at http://localhost:8080. Compose maps MySQL to port 3306. The repository includes a [database export](TrainFlowDatabase.sql).
 
-* User registration i autentifikacija (JWT)
-* Upravljanje korisničkim profilom
-* Kreiranje i uređivanje trening planova
-* Spremanje planova za korisnika
-* Praćenje workout logova
-* Role-based pristup (USER / ADMIN)
+## API overview
 
----
-
-## Authentication & Security
-
-Sustav koristi JWT (JSON Web Token) za autentifikaciju:
-
-* Access token za autorizaciju zahtjeva
-* Stateless session management
-* Zaštićeni endpointi kroz Spring Security filter chain
-* BCrypt hashiranje lozinki
-
----
-
-## Getting Started
-
-### Prerequisites
-
-* Docker
-* Docker Compose
-
----
-
-### Environment Variables
-
-Kreirati `.env` datoteku u root direktoriju projekta:
-
-```env
-MYSQL_DATABASE=trainflow
-MYSQL_USER=root
-MYSQL_PASSWORD=root
-MYSQL_ROOT_PASSWORD=root
-
-JWT_BASE64_SECRET=your_base64_secret_key
-```
-
----
-
-### Running the Application
-
-```bash
-docker compose up --build
-```
-
----
-
-### Default Services
-
-* Backend API: http://localhost:8080
-* Frontend: http://localhost:4200
-* MySQL: port 3306
-
----
-
-## API Overview
-
-### Authentication
-
-**POST /api/auth/login**
-
-Request:
+Use `POST /api/auth/login` to sign in:
 
 ```json
 {
   "email": "user@example.com",
-  "password": "password"
+  "password": "example-password"
 }
 ```
 
----
-
-**POST /api/auth/register**
-
-Request:
+Use `POST /api/auth/register` to create an account:
 
 ```json
 {
   "name": "John",
   "surname": "Doe",
   "email": "john@example.com",
-  "password": "password",
+  "password": "example-password",
   "age": 25,
   "height": 180,
   "weight": 75,
@@ -147,78 +74,18 @@ Request:
 }
 ```
 
----
+Include `Authorization: Bearer <JWT_TOKEN>` for protected endpoints.
 
-### Authorization
+The main database entities cover users and roles, training plans, training days, exercises, workout logs, and saved plans. Further backend settings include `spring.jpa.hibernate.ddl-auto`, `jwt.base64-secret`, and `jwt.token-validity-seconds`.
 
-Za zaštićene endpointove potrebno je poslati:
+## Future improvements
 
-```
-Authorization: Bearer <JWT_TOKEN>
-```
-
----
-
-## Database
-
-Baza podataka sastoji se od sljedećih glavnih entiteta:
-
-* users
-* roles
-* user_role
-* training_plans
-* training_days
-* training_day_exercises
-* exercises
-* workout_logs
-* user_saved_plans
-
-Relacije su definirane putem JPA anotacija.
-
----
-
-## Configuration
-
-Ključne konfiguracije u Spring Boot aplikaciji:
-
-```properties
-spring.datasource.url
-spring.datasource.username
-spring.datasource.password
-
-spring.jpa.hibernate.ddl-auto=update
-
-jwt.base64-secret
-jwt.token-validity-seconds
-```
-
----
-
-## Development Notes
-
-* `.env` datoteka nije verzionirana (sigurnosni razlozi)
-* `target/` direktorij ignoriran putem `.gitignore`
-* Docker se koristi za konzistentno okruženje između developmenta i deploya
-* Backend je stateless i skalabilan
-
----
-
-## Future Improvements
-
-* Centralized logging i monitoring
-* Test coverage (unit/integration testovi)
-* CI/CD pipeline
-* Pagination i optimizacija query-ja
-* UI/UX poboljšanja
-
----
+- Centralized logging and monitoring
+- More unit and integration tests
+- CI/CD
+- Pagination and query optimization
+- UI and usability improvements
 
 ## Author
 
-Domagoj
-
----
-
-## License
-
-Ovaj projekt je razvijen u edukacijske svrhe (završni rad).
+Domagoj Čirko
